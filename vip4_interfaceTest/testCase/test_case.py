@@ -2,7 +2,8 @@
 
 import  unittest
 from ddt import ddt,data,unpack
-from common.resdExcel import getExcelData
+from common.readExcel import getExcelData
+from common.writeExcel import writeExcel
 
 '''
 1.导入目标模块或包
@@ -26,10 +27,18 @@ class MyCase(object):
     @data()
     @unpack
     def test_request(self,id,url,name,method,param,expect):
-        print('')
+        #3.根据测试数据，调用对应的接口方法，完成接口请求
+        #4.获取实际结果
+        #5.将实际结果与预期结果进行比对
+        #6.将接口执行状态写入excel
+        writeData = writeExcel(result='',status='')
+        writeData.write()
 
     def __init__(self):
         pass
 
     def send_request(self):
         pass
+
+if __name__ == '__main__':
+    # mycase = MyTestCase()

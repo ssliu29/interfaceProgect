@@ -13,10 +13,11 @@ print(configPath)
 
 
 class ReadConfig(object):
-    def __init__(self, configPath=None):
+    def __init__(self):
         #1.实例化configparser对象
         self.cf = configparser.ConfigParser()
         #2.调用read方法读取该文件(传参：文件路径和编码格式)
+        configPath = '../config.ini'
         self.cf.read(configPath,encoding="utf-8-sig")
 
       #获取配置文件中的分组(eg:EMAIL)中的对应选项(eg:name)的值
@@ -33,3 +34,6 @@ class ReadConfig(object):
         value = self.cf.get("DATABASE",name)
         return value
 
+if __name__ == '__main__':
+    re = ReadConfig()
+    print(re.get_email('mail_user'))

@@ -11,7 +11,7 @@ class ConfigHttp(object):
 
 
     def get(self,url,param):
-        getresult = requests.get(url = url, params = param)
+        getresult = requests.get(url = url, params = eval(param))
         dict = getresult.json()
         print('get接口返回的结果:',getresult.text)
         errorcode = dict['errorCode']
@@ -32,7 +32,7 @@ class ConfigHttp(object):
 
 if __name__ == '__main__':
     con = ConfigHttp()
-    #data={'username':'liangchao','password':'123456'}
-    #con.post('https://www.wanandroid.com/user/login',data=data)
+    # data={'username':'liangchao','password':'123456'}
+    # con.post('https://www.wanandroid.com/user/login',data=data)
     # param = {'username':'liangchao'}
     # con.get('https://www.wanandroid.com/user/logout/json',param = param)

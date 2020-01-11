@@ -1,6 +1,6 @@
 #coding = utf-8
 
-import unittest
+import unittest,json
 from ddt import ddt,data,unpack
 from common.readExcel import getExcelData
 from common.writeExcel import writeExcel
@@ -33,16 +33,16 @@ class MyTestCase(unittest.TestCase):
     @ddt
     @data(*test_data)
     @unpack
-    def test_request(self,id,url,name,method,param,expect):
+    def test_request(self , id ,url  ,method ,param ,expect):
         #3.根据测试数据，调用对应的接口方法，完成接口请求
         if method == 'get' or method =='GET':
             # #请求get方法
             # 4.获取实际结果
             resultdata =result.get(url,param)
-            self.assertEqual(str(resultdata),str(expect))
+            real = json.loads(resultdata)['errorCode']
             #使用try-except接受异常，来判断断言是否成功
             try:
-                self.assertEqual(str(resultdata),str(expect))
+                self.assertEqual(str(expect),str(real))
                 status = "成功"
             except AssertionError as msg:
                 print(msg)
@@ -52,28 +52,25 @@ class MyTestCase(unittest.TestCase):
             #请求post方法
             # 4.获取实际结果
             resultdata = result.post(url,param)
-            # 5.将实际结果与预期结果进行比对
-            self.assertEqual(str(resultdata),expect)
+            print(type(resultdata))
+            real = json.loads(resultdata)['errorCode']
             try:
-                self.assertEqual(str(resultdata),str(expect))
+                # 5.将实际结果与预期结果进行比对
+                self.assertEqual(str(expect),str(real))
                 status = "Fail"
             except AssertionError as msg:
                 print(msg)
                 status ="Fail"
-
-        elif method == 'put' or method =='PUT':
-            #请求post方法
-            pass
-        elif method == 'delete' or method =='DELETE':
-            #请求post方法
-            pass
-
-        #6.将接口执行状态写入excel
-        writeData.addWriteExcel(id,resultdata,status)
+            finally:
+                # 6.将接口执行状态写入excel
+                if status == None:
+                    writeData.writeData(id,real,'Success')
+                else:
+                    writeData.writeData(id,real,'Fail')
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main()    #运行所有的用例
     # mycase = MyTestCase()
     # mycase.test_request()
 
